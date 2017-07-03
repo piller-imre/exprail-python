@@ -4,7 +4,7 @@ Parser class definition
 
 
 class Parser:
-    """The base class for the other parsers"""
+    """The base class for other parsers"""
 
     def __init__(self):
         pass
