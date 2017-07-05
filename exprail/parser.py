@@ -2,6 +2,8 @@
 Parser class definition
 """
 
+from exprail.node import NodeType
+
 
 class Parser:
     """The base class for other parsers"""
@@ -13,8 +15,9 @@ class Parser:
         :param source: a parser object which provides the source token stream
         """
         self._grammar = grammar
+        self._current_node = self._grammar.get_entry_node()
         self._source = source
-        self._current_node = grammar.get_entry_node()
+        self._source.parse()
         self._ready = False
         self._token = None
         self._stacks = {'': []}
@@ -24,7 +27,11 @@ class Parser:
         Parse the source stream while the parser has not become ready.
         :return: None
         """
-        pass
+        self._ready = False
+        while not self.is_ready():
+            token = self._source.get_token()
+            self.choose_next_node(token)
+            self.process_token(token)
 
     def get_token(self):
         """
@@ -48,14 +55,14 @@ class Parser:
         :param token: a token object
         :return: True, when the token is valid, else False
         """
-        pass
+        raise NotImplementedError('The token validation method has not implemented!')
 
-    def is_ready(self):
+    def get_finish_token(self):
         """
-        Signs that the processing has finished.
-        :return: True, when the processing has finished, else False
+        Returns with the finish token of the parser.
+        :return: a token object
         """
-        pass
+        raise NotImplementedError('The finish token has not implemented!')
 
     def show_info(self, message, token):
         """
@@ -64,7 +71,7 @@ class Parser:
         :param token: the current token object
         :return: None
         """
-        pass
+        print('INFO: {}'.format(message))
 
     def show_error(self, message, token):
         """
@@ -73,7 +80,7 @@ class Parser:
         :param token:
         :return:
         """
-        pass
+        print('ERROR: {}'.format(message))
 
     def transform(self, transformation, token):
         """
@@ -82,7 +89,7 @@ class Parser:
         :param token: the original token object
         :return: the transformed token object
         """
-        pass
+        return token
 
     def operate(self, operation, token):
         """
@@ -100,7 +107,7 @@ class Parser:
         :param token: the current token
         :return: None
         """
-        pass
+        self._stacks[stack_name].append(token.value)
 
     def clean_stack(self, stack_name, token):
         """
@@ -109,4 +116,54 @@ class Parser:
         :param token: the current token
         :return: None
         """
+        self._stacks[stack_name] = []
+
+    def is_ready(self):
+        """
+        Signs that the processing has finished.
+        :return: True, when the processing has finished, else False
+        """
+        return self._ready
+
+    def choose_next_node(self, token):
+        """
+        Choose the next node and set it as the current node.
+        :param token: the current token
+        :return: None
+        """
+        # TODO: Choose the next node of the grammar graph!
         pass
+
+    def collect_available_nodes(self):
+        """
+        Collect the available nodes from the current node.
+        :return: the list of the available nodes
+        """
+        # TODO: Collect the available nodes from the grammar graph!
+        pass
+
+    def process_token(self, token):
+        """
+        Process the token according to the current node.
+        :param token: a token object
+        :return: None
+        """
+        node_type = self._current_node.type
+        node_value = self._current_node.value
+        if node_type is NodeType.FINISH:
+            self._token = self.get_finish_token()
+            self._ready = True
+        elif node_type is NodeType.INFO:
+            self.show_info(node_value, token)
+        elif node_type is NodeType.ERROR:
+            self.show_error(node_value, token)
+        elif node_type is NodeType.TRANSFORMATION:
+            self._current_node = self.transform(node_value, token)
+        elif node_type is NodeType.OPERATION:
+            self.operate(node_value, token)
+        elif node_type is NodeType.STACK:
+            self.push_stack(node_value, token)
+        elif node_type is NodeType.CLEAN:
+            self.clean_stack(node_value, token)
+        elif node_type is NodeType.TOKEN:
+            self._source.parse()
