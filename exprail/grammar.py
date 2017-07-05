@@ -13,6 +13,7 @@ class Grammar:
         self._expressions = {}
         if filename is not None:
             self.load_from_file(filename)
+            self.validate()
 
     def load_from_file(self, filename):
         """Load the grammar from a grammar description."""
@@ -34,3 +35,12 @@ class Grammar:
                         source_id = int(words[0])
                         target_id = int(words[1])
                         self._expressions[expression_name].add_edge(source_id, target_id)
+
+    def validate(self):
+        """Validate the grammar."""
+        # TODO: Raise errors when the grammar is invalid!
+        pass
+
+    def get_entry_node(self):
+        """Get the entry node of the grammar."""
+        pass
