@@ -3,6 +3,7 @@ Parser class definition
 """
 
 from exprail.node import NodeType
+from exprail import router
 
 
 class Parser:
@@ -30,7 +31,7 @@ class Parser:
         self._ready = False
         while not self.is_ready():
             token = self._source.get_token()
-            self.choose_next_node(token)
+            self._current_node = router.find_next_node(self._grammar, self._current_node, token)
             self.process_token(token)
 
     def get_token(self):
@@ -124,23 +125,6 @@ class Parser:
         :return: True, when the processing has finished, else False
         """
         return self._ready
-
-    def choose_next_node(self, token):
-        """
-        Choose the next node and set it as the current node.
-        :param token: the current token
-        :return: None
-        """
-        # TODO: Choose the next node of the grammar graph!
-        pass
-
-    def collect_available_nodes(self):
-        """
-        Collect the available nodes from the current node.
-        :return: the list of the available nodes
-        """
-        # TODO: Collect the available nodes from the grammar graph!
-        pass
 
     def process_token(self, token):
         """
