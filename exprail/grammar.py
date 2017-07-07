@@ -25,4 +25,7 @@ class Grammar:
 
     def get_entry_node(self):
         """Get the entry node of the grammar."""
-        pass
+        for _, expression in self._expressions:
+            if expression.is_entry_expression():
+                return expression.get_start_node()
+        raise RuntimeError('The entry expression is missing!')

@@ -13,6 +13,7 @@ def load_expressions(path):
     :return: dictionary of expression objects
     """
     expressions = {}
+    expression_index = 0
     with open(path, 'r') as grammar_file:
         expression_name = ''
         for line in grammar_file:
@@ -20,7 +21,8 @@ def load_expressions(path):
             if len(words) > 0:
                 if words[0] == 'expression':
                     expression_name = words[1][1:-2]
-                    expressions[expression_name] = Expression()
+                    expressions[expression_name] = Expression(expression_index)
+                    expression_index += 1
                 elif len(words) == 5:
                     node_id = int(words[0])
                     node_type = words[1]
