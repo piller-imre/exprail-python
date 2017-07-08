@@ -15,6 +15,14 @@ class Grammar:
             self.load_from_file(filename)
             self.validate()
 
+    @property
+    def expressions(self):
+        return self._expressions
+
+    def add_expression(self, name, expression):
+        """Add new expression to the grammar."""
+        self._expressions[name] = expression
+
     def load_from_file(self, filename):
         """Load the grammar from a grammar description."""
         self._expressions = loader.load_expressions(filename)

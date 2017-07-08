@@ -26,7 +26,7 @@ class NodeType(Enum):
 class Node:
     """Represents a node of the syntax graph"""
 
-    def __init__(self, type, value):
+    def __init__(self, type, value=''):
         self._type = NodeType(type)
         self._value = value
         self._targets = []
