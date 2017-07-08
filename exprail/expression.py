@@ -12,6 +12,10 @@ class Expression:
         self._nodes = {}
         self._index = index
 
+    @property
+    def nodes(self):
+        return self._nodes
+
     def is_entry_expression(self):
         """
         Signs that the expression is the entry expression of the grammar.

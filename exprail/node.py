@@ -33,11 +33,11 @@ class Node:
 
     @property
     def type(self):
-        return self.type
+        return self._type
 
     @property
     def value(self):
-        return self.value
+        return self._value
 
     @property
     def targets(self):

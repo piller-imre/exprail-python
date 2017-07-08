@@ -1,0 +1,10 @@
+expression "sample"
+nodes
+1 start "" 0 0
+2 info "Nothing new" 100 100
+3 expression "sample" 200 200
+4 finish "" 300 300
+edges
+1 2
+2 3
+3 4

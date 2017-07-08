@@ -1,0 +1,10 @@
+expression "escaped"
+nodes
+1 start "" 0 0
+2 info "a \" character" 100 100
+3 info "a \\ character" 100 100
+4 info "both \" and \\ characters" 100 100
+5 info "multiple \"\\\" and \\\\\" in value" 100 100
+6 info "three   two  one zero" 100 100
+7 finish "" 0 0
+edges
