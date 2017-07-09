@@ -9,15 +9,24 @@ from exprail import validator
 class Grammar:
     """Represents a grammar"""
 
-    def __init__(self, filename=None):
+    def __init__(self, filename=None, classifier=None):
+        self._classifier = classifier
         self._expressions = {}
         if filename is not None:
             self.load_from_file(filename)
             self.validate()
 
     @property
+    def classifier(self):
+        return self._classifier
+
+    @property
     def expressions(self):
         return self._expressions
+
+    def set_classifier(self, classifier):
+        """Set the token classifier of the grammar."""
+        self._classifier = classifier
 
     def add_expression(self, name, expression):
         """Add new expression to the grammar."""
@@ -31,9 +40,9 @@ class Grammar:
         """Validate the grammar."""
         validator.validate_grammar(self)
 
-    def get_entry_node(self):
-        """Get the entry node of the grammar."""
-        for _, expression in self._expressions:
+    def get_entry_expression_name(self):
+        """Get the name of the entry expression."""
+        for expression_name, expression in self._expressions:
             if expression.is_entry_expression():
-                return expression.get_start_node()
+                return expression_name
         raise RuntimeError('The entry expression is missing!')

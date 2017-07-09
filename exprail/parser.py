@@ -4,6 +4,7 @@ Parser class definition
 
 from exprail.node import NodeType
 from exprail import router
+from exprail.state import State
 
 
 class Parser:
@@ -16,7 +17,7 @@ class Parser:
         :param source: a parser object which provides the source token stream
         """
         self._grammar = grammar
-        self._current_node = self._grammar.get_entry_node()
+        self._state = State(self._grammar)
         self._source = source
         self._source.parse()
         self._ready = False
@@ -31,7 +32,7 @@ class Parser:
         self._ready = False
         while not self.is_ready():
             token = self._source.get_token()
-            self._current_node = router.find_next_node(self._grammar, self._current_node, token)
+            self._state = router.find_next_state(self._state, token)
             self.process_token(token)
 
     def get_token(self):
@@ -48,15 +49,6 @@ class Parser:
         """
         self.parse()
         return self.get_token()
-
-    def is_valid_token(self, token_filter, token):
-        """
-        Check that the processed token is valid according the the node.
-        :param token_filter: a string for describing a valid token, for example 'keyword: class'
-        :param token: a token object
-        :return: True, when the token is valid, else False
-        """
-        raise NotImplementedError('The token validation method has not implemented!')
 
     def get_finish_token(self):
         """
@@ -132,8 +124,8 @@ class Parser:
         :param token: a token object
         :return: None
         """
-        node_type = self._current_node.type
-        node_value = self._current_node.value
+        node_type = self._state.node.type
+        node_value = self._state.node.value
         if node_type is NodeType.FINISH:
             self._token = self.get_finish_token()
             self._ready = True
@@ -142,7 +134,7 @@ class Parser:
         elif node_type is NodeType.ERROR:
             self.show_error(node_value, token)
         elif node_type is NodeType.TRANSFORMATION:
-            self._current_node = self.transform(node_value, token)
+            self._token = self.transform(node_value, token)
         elif node_type is NodeType.OPERATION:
             self.operate(node_value, token)
         elif node_type is NodeType.STACK:

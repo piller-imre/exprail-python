@@ -33,12 +33,12 @@ class Expression:
         target_node = self._nodes[target_id]
         source_node.add_target(target_node)
 
-    def get_start_node(self):
+    def get_start_node_id(self):
         """
-        Get the start node of the expression graph.
-        :return: the start node
+        Get the identifier of the start node of the expression graph.
+        :return: the identifier of the start node
         """
-        for node in self._nodes:
+        for node_id, node in self._nodes.items():
             if node.type is NodeType.START:
-                return node
+                return node_id
         raise RuntimeError('The start node is missing from the expression!')

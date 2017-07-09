@@ -2,22 +2,24 @@
 Functions for finding routes in the grammar.
 """
 
+from exprail.state import State
 
-def find_next_node(grammar, node, token):
+
+def find_next_state(state, token):
     """
-    Find the next node in the grammar graph according to the current node and the token.
-    :param grammar: a grammar object
-    :param node: a node in the grammar
+    Find the next state of the parser according to the current state and the token.
+    :param state: the current state of the parser
     :param token: the currently processed token
-    :return: the next node
+    :return: the next state
     """
-    pass
+    available_states = collect_available_states(state)
+    return available_states[0]
 
 
-def collect_available_nodes(self):
+def collect_available_states(self, state):
     """
-    Collect the available nodes from the current node.
-    :return: the list of the available nodes
+    Collect the available states from the current state.
+    :param state: the current state of the parser
+    :return: the list of the available states
     """
-    # TODO: Collect the available nodes from the grammar graph!
-    pass
+    return []
