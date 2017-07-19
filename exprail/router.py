@@ -13,23 +13,23 @@ def find_next_state(state, token):
     :return: the next state
     """
     available_states = collect_available_states(state)
-    return available_states[0]
+    return None
 
 
 def collect_available_states(state):
     """
     Collect the available states from the current state.
     :param state: the current state of the parser
-    :return: the list of the available states
+    :return: the set of the available states
     """
-    return []
+    return set()
 
 
-def find_router_nodes(node):
+def find_router_node_ids(state):
     """
-    Find the next available router nodes from the current node.
-    The type of the router node is NodeType.ROUTER or NodeType.TOKEN.
-    :param node: the start node of the searching
-    :return: the list of router nodes
+    Find the next available router nodes identifiers from the current node.
+    The type of the router node is NodeType.ROUTER, NodeType.TOKEN and NodeType.FINISH.
+    :param state: the start state of the searching
+    :return: the set of router node identifiers
     """
-    return []
+    return set()
