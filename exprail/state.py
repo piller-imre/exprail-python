@@ -15,12 +15,27 @@ class State:
                 raise ValueError('Unnecessary node identifier argument!')
         elif expression_name in grammar.expressions:
             self._expression_name = expression_name
-            if node_id in grammar[expression_name].nodes():
-                self._node_id = node_id
+            expression = grammar.expressions[expression_name]
+            if node_id is None:
+                self._node_id = expression.get_start_node_id()
             else:
-                raise ValueError('The "{}" expression does not contain the node {}'.format(expression_name, node_id))
+                if node_id in expression.nodes:
+                    self._node_id = node_id
+                else:
+                    raise ValueError('The "{}" expression does not contain the node {}'.format(expression_name, node_id))
         else:
             raise ValueError('The grammar has no "{}" expression!'.format(expression_name))
+
+    def __repr__(self):
+        return '<State(expression_name=\'{}\', node_id={})>'.format(self._expression_name, self._node_id)
+
+    def __eq__(self, other):
+        # NOTE: It does not consider the grammar object!
+        return self._expression_name == other.expression_name and self._node_id == other.node_id
+
+    def __hash__(self):
+        # NOTE: It does not consider the grammar object!
+        return hash((self._expression_name, self._node_id))
 
     @property
     def expression_name(self):
