@@ -70,5 +70,7 @@ class RouterTest(unittest.TestCase):
         }
         for source_id, node_ids in connections.items():
             state = State(grammar, 'function', source_id)
-            router_node_ids = router.find_router_node_ids(state)
-            self.assertEqual(router_node_ids, node_ids)
+            router_nodes = router.find_router_nodes(state)
+            self.assertEqual(len(router_nodes), len(node_ids))
+            for node in router_nodes:
+                self.assertEqual(node.id, node_ids)

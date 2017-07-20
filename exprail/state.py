@@ -38,6 +38,10 @@ class State:
         return hash((self._expression_name, self._node_id))
 
     @property
+    def grammar(self):
+        return self._grammar
+
+    @property
     def expression_name(self):
         return self._expression_name
 

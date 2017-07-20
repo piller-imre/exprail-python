@@ -25,11 +25,11 @@ def collect_available_states(state):
     return set()
 
 
-def find_router_node_ids(state):
+def find_router_nodes(state):
     """
     Find the next available router nodes identifiers from the current node.
-    The type of the router node is NodeType.ROUTER, NodeType.TOKEN and NodeType.FINISH.
+    The type of the router node is NodeType.ROUTER, NodeType.TOKEN or NodeType.FINISH.
     :param state: the start state of the searching
-    :return: the set of router node identifiers
+    :return: the set of router nodes
     """
     return set()
