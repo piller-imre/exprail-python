@@ -34,9 +34,10 @@ class RouterTest(unittest.TestCase):
 
     def test_recurrent_next_state(self):
         grammar = Grammar('/tmp/exprail/function.grammar')
-        state = State(grammar, 'skip', 3)
-        states = router.collect_available_states(state)
-        self.assertEqual(states, {state})
+        token_state = State(grammar, 'skip', 3)
+        finish_state = State(grammar, 'skip', 2)
+        states = router.collect_available_states(token_state)
+        self.assertEqual(states, {token_state, finish_state})
 
     def test_multiple_next_states(self):
         grammar = Grammar('/tmp/exprail/function.grammar')
@@ -57,11 +58,13 @@ class RouterTest(unittest.TestCase):
         grammar = Grammar('/tmp/exprail/function.grammar')
         connections = {
             1: {3, 12},
-            3: {4, 14},
-            5: {2},
-            6: {2, 5},
-            7: {2, 5},
-            9: {2, 5},
+            2: {2},
+            3: {3},
+            4: {4},
+            5: {5},
+            6: {6},
+            8: {2, 5, 6, 10},
+            9: {2, 5, 10},
             11: {12},
             13: {14},
             15: {2},
@@ -71,6 +74,5 @@ class RouterTest(unittest.TestCase):
         for source_id, node_ids in connections.items():
             state = State(grammar, 'function', source_id)
             router_nodes = router.find_router_nodes(state)
-            self.assertEqual(len(router_nodes), len(node_ids))
-            for node in router_nodes:
-                self.assertEqual(node.id, node_ids)
+            expected_nodes = {state.expression.nodes[node_id] for node_id in node_ids}
+            self.assertEqual(router_nodes, expected_nodes)

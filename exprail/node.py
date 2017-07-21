@@ -29,7 +29,6 @@ class Node:
     def __init__(self, type, value=''):
         self._type = NodeType(type)
         self._value = value
-        self._targets = []
 
     @property
     def type(self):
@@ -39,10 +38,11 @@ class Node:
     def value(self):
         return self._value
 
-    @property
-    def targets(self):
-        return self._targets
+    def __repr__(self):
+        return '<Node({}, {})>'.format(self._type, self._value)
 
-    def add_target(self, target_node):
-        """Add a target node."""
-        self._targets.append(target_node)
+    def __eq__(self, other):
+        return self.type is other.type and self.value == other.value
+
+    def __hash__(self):
+        return hash((self._type, self._value))

@@ -10,6 +10,7 @@ class Expression:
 
     def __init__(self, index=None):
         self._nodes = {}
+        self._edges = {}
         self._index = index
 
     @property
@@ -29,9 +30,9 @@ class Expression:
 
     def add_edge(self, source_id, target_id):
         """Add new edge to the expression."""
-        source_node = self._nodes[source_id]
-        target_node = self._nodes[target_id]
-        source_node.add_target(target_node)
+        if source_id not in self._edges:
+            self._edges[source_id] = set()
+        self._edges[source_id].add(target_id)
 
     def get_start_node_id(self):
         """
@@ -42,3 +43,16 @@ class Expression:
             if node.type is NodeType.START:
                 return node_id
         raise RuntimeError('The start node is missing from the expression!')
+
+    def get_target_node_ids(self, node_id):
+        """
+        Get the identifiers of the target nodes from the given node.
+        :param node_id: the identifier of the reference node
+        :return: the set of target node identifiers
+        :raises ValueError: when the node identifier is invalid
+        """
+        if node_id not in self._nodes:
+            raise ValueError('The node id {} is invalid!'.format(node_id))
+        if node_id not in self._edges:
+            return set()
+        return self._edges[node_id]

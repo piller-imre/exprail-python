@@ -47,7 +47,7 @@ class State:
 
     @property
     def expression(self):
-        return self._grammar[self._expression_name]
+        return self._grammar.expressions[self._expression_name]
 
     @property
     def node_id(self):
