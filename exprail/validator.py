@@ -11,16 +11,26 @@ def check_start_node(expression):
     :param expression: the validated expression object
     :return: None
     """
-    pass
+    n_start_nodes = 0
+    for _, node in expression.nodes.items():
+        if node.type is NodeType.START:
+            n_start_nodes += 1
+    if n_start_nodes < 1:
+        raise RuntimeError('Missing start node!')
+    elif n_start_nodes > 1:
+        raise RuntimeError('Too many start nodes!')
 
 
 def check_finish_node(expression):
     """
-    Check that there is exactly one finish node in the expression.
+    Check that there is at least one finish node in the expression.
     :param expression: the validated expression object
     :return: None
     """
-    pass
+    for _, node in expression.nodes.items():
+        if node.type is NodeType.FINISH:
+            return
+    raise RuntimeError('Missing finish node!')
 
 
 def check_ground_nodes(expression):
@@ -29,7 +39,12 @@ def check_ground_nodes(expression):
     :param expression: the validated expression object
     :return: None
     """
-    pass
+    n_ground_nodes = 0
+    for _, node in expression.nodes.items():
+        if node.type is NodeType.GROUND:
+            n_ground_nodes += 1
+    if n_ground_nodes > 1:
+        raise RuntimeError('Too many ground nodes!')
 
 
 def check_missing_node_values(expression):
@@ -38,7 +53,20 @@ def check_missing_node_values(expression):
     :param expression: the validated expression object
     :return: None
     """
-    pass
+    require_node_value = {
+        NodeType.EXPRESSION,
+        NodeType.TOKEN,
+        NodeType.ROUTER,
+        NodeType.AVOID,
+        NodeType.INFO,
+        NodeType.ERROR,
+        NodeType.OPERATION,
+        NodeType.TRANSFORMATION
+    }
+    for _, node in expression.nodes.items():
+        if node.type in require_node_value:
+            if node.value == '':
+                raise RuntimeError('Missing node value!')
 
 
 def check_unnecessary_node_values(expression):
@@ -47,7 +75,16 @@ def check_unnecessary_node_values(expression):
     :param expression: the validated expression object
     :return: None
     """
-    pass
+    do_not_require_node_values = {
+        NodeType.START,
+        NodeType.FINISH,
+        NodeType.CONNECTION,
+        NodeType.GROUND
+    }
+    for _, node in expression.nodes.items():
+        if node.type in do_not_require_node_values:
+            if node.value != '':
+                raise RuntimeError('Unnecessary node value!')
 
 
 def check_invalid_connections(expression):
@@ -56,7 +93,21 @@ def check_invalid_connections(expression):
     :param expression: the validated expression object
     :return: None
     """
-    pass
+    for node_id, node in expression.nodes.items():
+        n_source_nodes = len(expression.get_source_node_ids(node_id))
+        if node.type in [NodeType.START, NodeType.GROUND]:
+            if n_source_nodes > 0:
+                raise RuntimeError('Invalid source for node {}!'.format(node_id))
+        else:
+            if n_source_nodes == 0:
+                raise RuntimeError('Missing source for node {}!'.format(node_id))
+        n_target_nodes = len(expression.get_target_node_ids(node_id))
+        if node.type is NodeType.FINISH:
+            if n_target_nodes > 0:
+                raise RuntimeError('Invalid target for node {}!'.format(node_id))
+        else:
+            if n_target_nodes == 0:
+                raise RuntimeError('Missing target for node {}!'.format(node_id))
 
 
 def validate_expression(expression):
@@ -79,7 +130,11 @@ def check_referenced_expressions(grammar):
     :param grammar: a grammar object
     :return: None
     """
-    pass
+    for expression in grammar.expressions.values():
+        for node_id, node in expression.nodes.items():
+            if node.type is NodeType.EXPRESSION:
+                if node.value not in grammar.expressions:
+                    raise RuntimeError('Invalid expression name "{}" at node {}!'.format(node.value, node_id))
 
 
 def validate_grammar(grammar):

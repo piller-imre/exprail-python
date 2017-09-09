@@ -44,6 +44,21 @@ class Expression:
                 return node_id
         raise RuntimeError('The start node is missing from the expression!')
 
+    def get_source_node_ids(self, node_id):
+        """
+        Get the identifiers of the source nodes of the given node.
+        :param node_id: the identifier of the reference node
+        :return: the set of target node identifiers
+        :raises ValueError: when the node identifier is invalid
+        """
+        if node_id not in self._nodes:
+            raise ValueError('The node id {} is invalid!'.format(node_id))
+        source_ids = set()
+        for source_id, target_ids in self._edges.items():
+            if node_id in target_ids:
+                source_ids.add(source_id)
+        return source_ids
+
     def get_target_node_ids(self, node_id):
         """
         Get the identifiers of the target nodes from the given node.

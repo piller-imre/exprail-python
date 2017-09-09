@@ -38,18 +38,6 @@ class ValidatorTest(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             validator.check_finish_node(expression)
 
-    def test_multiple_finish_node(self):
-        expression = Expression()
-        expression.add_node(1, Node(NodeType.START))
-        expression.add_node(2, Node(NodeType.INFO, 'validation test'))
-        expression.add_node(3, Node(NodeType.FINISH))
-        expression.add_node(4, Node(NodeType.FINISH))
-        expression.add_edge(1, 2)
-        expression.add_edge(2, 3)
-        expression.add_edge(2, 4)
-        with self.assertRaises(RuntimeError):
-            validator.check_finish_node(expression)
-
     def test_multiple_ground_nodes(self):
         expression = Expression()
         expression.add_node(1, Node(NodeType.START))
