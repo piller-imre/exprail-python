@@ -40,13 +40,15 @@ class LoaderTest(unittest.TestCase):
         self.assertIn(4, nodes)
         self.assertEqual(nodes[4].type, NodeType.FINISH)
         self.assertEqual(nodes[4].value, '')
-        self.assertEqual(len(nodes[1].targets), 1)
-        self.assertEqual(len(nodes[2].targets), 1)
-        self.assertEqual(len(nodes[3].targets), 1)
-        self.assertEqual(len(nodes[4].targets), 0)
-        self.assertEqual(nodes[1].targets[0], nodes[2])
-        self.assertEqual(nodes[2].targets[0], nodes[3])
-        self.assertEqual(nodes[3].targets[0], nodes[4])
+        targets = {
+            1: {2},
+            2: {3},
+            3: {4},
+            4: set()
+        }
+        for node_id, reference_ids in targets.items():
+            target_ids = expression.get_target_node_ids(node_id)
+            self.assertEqual(target_ids, reference_ids)
 
     def test_escaped_characters(self):
         expressions = loader.load_expressions('/tmp/exprail/escaped.grammar')
@@ -83,27 +85,25 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(len(expression.nodes), 6)
         self.assertIn('second', expressions)
         targets = {
-            1: [4, 5],
-            2: [],
-            3: [2],
-            4: [3, 6],
-            5: [6],
-            6: [2]
+            1: {4, 5},
+            2: set(),
+            3: {2},
+            4: {3, 6},
+            5: {6},
+            6: {2}
         }
-        for source_id, target_ids in targets.items():
-            self.assertEqual(len(target_ids), len(expression.nodes[source_id].targets))
-            for target_id in target_ids:
-                self.assertIn(expression.nodes[target_id], expression.nodes[source_id].targets)
+        for node_id, reference_ids in targets.items():
+            target_ids = expression.get_target_node_ids(node_id)
+            self.assertEqual(target_ids, reference_ids)
         expression = expressions['second']
         self.assertEqual(len(expression.nodes), 5)
         targets = {
-            1: [3, 4, 5],
-            2: [],
-            3: [2],
-            4: [2],
-            5: [2]
+            1: {3, 4, 5},
+            2: set(),
+            3: {2},
+            4: {2},
+            5: {2}
         }
-        for source_id, target_ids in targets.items():
-            self.assertEqual(len(target_ids), len(expression.nodes[source_id].targets))
-            for target_id in target_ids:
-                self.assertIn(expression.nodes[target_id], expression.nodes[source_id].targets)
+        for node_id, reference_ids in targets.items():
+            target_ids = expression.get_target_node_ids(node_id)
+            self.assertEqual(target_ids, reference_ids)

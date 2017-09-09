@@ -12,15 +12,16 @@ class NodeType(Enum):
     FINISH = 'finish'
     CONNECTION = 'connection'
     EXPRESSION = 'expression'
+    GROUND = 'ground'
+    TOKEN = 'token'
+    ROUTER = 'router'
+    AVOID = 'avoid'
     INFO = 'info'
     ERROR = 'error'
-    TRANSFORMATION = 'transformation'
     OPERATION = 'operation'
+    TRANSFORMATION = 'transformation'
     STACK = 'stack'
     CLEAN = 'clean'
-    GROUND = 'ground'
-    ROUTER = 'router'
-    TOKEN = 'token'
 
 
 class Node:
