@@ -42,7 +42,7 @@ class Grammar:
 
     def get_entry_expression_name(self):
         """Get the name of the entry expression."""
-        for expression_name, expression in self._expressions:
+        for expression_name, expression in self._expressions.items():
             if expression.is_entry_expression():
                 return expression_name
         raise RuntimeError('The entry expression is missing!')

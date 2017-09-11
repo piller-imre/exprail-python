@@ -53,9 +53,10 @@ class Parser:
     def get_finish_token(self):
         """
         Returns with the finish token of the parser.
+        NOTE: It must be implemented when the parser provides tokens as outputs!
         :return: a token object
         """
-        raise NotImplementedError('The finish token has not implemented!')
+        pass
 
     def show_info(self, message, token):
         """
