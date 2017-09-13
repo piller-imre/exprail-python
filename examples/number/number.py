@@ -1,7 +1,7 @@
 from exprail.classifier import Classifier
 from exprail.grammar import Grammar
 from exprail.parser import Parser
-from exprail.source import Source
+from exprail.source import SourceFile
 
 
 class NumberClassifier(Classifier):
@@ -40,6 +40,6 @@ class NumberParser(Parser):
 if __name__ == '__main__':
     number_classifier = NumberClassifier()
     grammar = Grammar(filename='number.grammar', classifier=number_classifier)
-    source = Source('number.txt')
+    source = SourceFile('number.txt')
     parser = NumberParser(grammar, source)
     parser.parse()

@@ -37,9 +37,12 @@ def collect_possible_next_states(state, token):
     for available_state in available_states:
         router_nodes = find_router_nodes(available_state)
         for node in router_nodes:
-            assert node.type in [NodeType.ROUTER, NodeType.TOKEN, NodeType.FINISH]
+            assert node.type in [NodeType.ROUTER, NodeType.AVOID, NodeType.TOKEN, NodeType.FINISH]
             if node.type in [NodeType.ROUTER, NodeType.TOKEN]:
                 if classifier.is_in_class(node.value, token):
+                    matching_states.add(available_state)
+            elif node.type is NodeType.AVOID:
+                if not classifier.is_in_class(node.value, token):
                     matching_states.add(available_state)
             else:
                 finish_states.add(available_state)
@@ -83,7 +86,7 @@ def collect_available_states(state):
 def find_router_nodes(state):
     """
     Find the available router node identifiers from the current node.
-    The type of the router node can be NodeType.ROUTER, NodeType.TOKEN or NodeType.FINISH.
+    The type of the router node can be NodeType.ROUTER, NodeType.AVOID, NodeType.TOKEN or NodeType.FINISH.
     The router node is the current node of the state when the type matches.
     :param state: the start state of the searching
     :return: set of router nodes
@@ -97,7 +100,7 @@ def find_router_nodes(state):
         if node_id not in visited_node_ids:
             visited_node_ids.add(node_id)
             node = state.expression.nodes[node_id]
-            if node.type in [NodeType.ROUTER, NodeType.TOKEN, NodeType.FINISH]:
+            if node.type in [NodeType.ROUTER, NodeType.AVOID, NodeType.TOKEN, NodeType.FINISH]:
                 router_nodes.add(node)
             else:
                 next_node_ids.update(state.expression.get_target_node_ids(node_id))

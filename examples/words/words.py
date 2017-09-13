@@ -1,7 +1,7 @@
 from exprail.classifier import Classifier
 from exprail.grammar import Grammar
 from exprail.parser import Parser
-from exprail.source import Source
+from exprail.source import SourceFile
 
 
 class WsClassifier(Classifier):
@@ -37,6 +37,6 @@ class WsParser(Parser):
 if __name__ == '__main__':
     ws_classifier = WsClassifier()
     grammar = Grammar(filename='words.grammar', classifier=ws_classifier)
-    source = Source('words.txt')
+    source = SourceFile('words.txt')
     parser = WsParser(grammar, source)
     parser.parse()

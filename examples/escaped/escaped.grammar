@@ -1,0 +1,42 @@
+expression "escaped"
+nodes
+1 start "" 55 190
+2 finish "" 782 473
+3 token "\"" 198 191
+4 token "\"" 527 471
+5 error "Missing quote!" 168 315
+6 finish "" 286 314
+7 token "\\" 516 297
+8 token "\\" 776 263
+9 token "\"" 776 333
+10 error "Invalid escape character!" 669 386
+11 finish "" 834 387
+12 stack "" 667 193
+13 avoid "\"\\" 511 193
+14 connection "" 337 192
+15 operation "print" 671 472
+16 stack "" 667 297
+17 token "." 773 195
+18 connection "" 911 196
+edges
+1 3
+1 5
+3 14
+4 15
+5 6
+7 10
+7 16
+8 18
+9 18
+10 11
+12 17
+13 12
+14 4
+14 7
+14 13
+15 2
+16 8
+16 9
+17 18
+18 14
+
