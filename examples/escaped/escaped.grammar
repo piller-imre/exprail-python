@@ -12,7 +12,7 @@ nodes
 10 error "Invalid escape character!" 669 386
 11 finish "" 834 387
 12 stack "" 667 193
-13 avoid "\"\\" 511 193
+13 except_router "\"\\" 511 193
 14 connection "" 337 192
 15 operation "print" 671 472
 16 stack "" 667 297

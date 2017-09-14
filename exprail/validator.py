@@ -56,8 +56,9 @@ def check_missing_node_values(expression):
     require_node_value = {
         NodeType.EXPRESSION,
         NodeType.TOKEN,
+        NodeType.EXCEPT_TOKEN,
         NodeType.ROUTER,
-        NodeType.AVOID,
+        NodeType.EXCEPT_ROUTER,
         NodeType.INFO,
         NodeType.ERROR,
         NodeType.OPERATION,

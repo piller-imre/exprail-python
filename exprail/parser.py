@@ -142,5 +142,5 @@ class Parser:
             self.push_stack(node_value, token)
         elif node_type is NodeType.CLEAN:
             self.clean_stack(node_value, token)
-        elif node_type is NodeType.TOKEN:
+        elif node_type in [NodeType.TOKEN, NodeType.EXCEPT_TOKEN, NodeType.DEFAULT_TOKEN]:
             self._source.parse()
