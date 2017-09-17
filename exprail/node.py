@@ -42,6 +42,22 @@ class Node:
     def value(self):
         return self._value
 
+    def has_routing_information(self):
+        """
+        Check that the node has information for routing.
+        :return: True, when the node helps routing, else False
+        """
+        router_node_types = [
+            NodeType.ROUTER,
+            NodeType.EXCEPT_ROUTER,
+            NodeType.DEFAULT_ROUTER,
+            NodeType.TOKEN,
+            NodeType.EXCEPT_TOKEN,
+            NodeType.DEFAULT_TOKEN,
+            NodeType.FINISH
+        ]
+        return self._type in router_node_types
+
     def __repr__(self):
         return '<Node({}, {})>'.format(self._type, self._value)
 

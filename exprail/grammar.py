@@ -4,6 +4,7 @@ Grammar class definition
 
 from exprail import loader
 from exprail import validator
+from exprail.state import State
 
 
 class Grammar:
@@ -39,6 +40,15 @@ class Grammar:
     def validate(self):
         """Validate the grammar."""
         validator.validate_grammar(self)
+
+    def get_initial_state(self):
+        """
+        Get the initial state of the grammar.
+        :return: the State object of the grammar
+        """
+        expression_name = self.get_entry_expression_name()
+        node_id = self.expressions[expression_name].get_start_node_id()
+        return State(self, expression_name, node_id, None)
 
     def get_entry_expression_name(self):
         """Get the name of the entry expression."""

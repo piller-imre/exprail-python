@@ -17,7 +17,7 @@ class Parser:
         :param source: a parser object which provides the source token stream
         """
         self._grammar = grammar
-        self._state = State(self._grammar)
+        self._state = grammar.get_initial_state()
         self._source = source
         self._source.parse()
         self._ready = False
@@ -30,7 +30,7 @@ class Parser:
         :return: None
         """
         self._ready = False
-        while not self.is_ready():
+        while not self._ready:
             token = self._source.get_token()
             self._state = router.find_next_state(self._state, token)
             self.process_token(token)
@@ -112,13 +112,6 @@ class Parser:
         """
         self._stacks[stack_name] = []
 
-    def is_ready(self):
-        """
-        Signs that the processing has finished.
-        :return: True, when the processing has finished, else False
-        """
-        return self._ready
-
     def process_token(self, token):
         """
         Process the token according to the current node.
@@ -127,9 +120,16 @@ class Parser:
         """
         node_type = self._state.node.type
         node_value = self._state.node.value
-        if node_type is NodeType.FINISH:
-            self._token = self.get_finish_token()
-            self._ready = True
+        if node_type is NodeType.EXPRESSION:
+            expression_name = self._state.node.value
+            node_id = self._state.grammar.expressions[expression_name].get_start_node_id()
+            self._state = State(self._state.grammar, expression_name, node_id, self._state)
+        elif node_type is NodeType.FINISH:
+            if self._state.return_state is None:
+                # self._token = self.get_finish_token()
+                self._ready = True
+            else:
+                self._state = self._state.return_state
         elif node_type is NodeType.INFO:
             self.show_info(node_value, token)
         elif node_type is NodeType.ERROR:

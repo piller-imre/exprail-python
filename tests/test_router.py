@@ -63,7 +63,7 @@ class RouterTest(unittest.TestCase):
             4: {4},
             5: {5},
             6: {6},
-            8: {2, 5, 6, 10},
+            8: {5, 6},
             9: {2, 5, 10},
             11: {12},
             13: {14},
@@ -72,7 +72,7 @@ class RouterTest(unittest.TestCase):
             17: {18}
         }
         for source_id, node_ids in connections.items():
-            state = State(grammar, 'function', source_id)
-            router_nodes = router.find_router_nodes(state)
-            expected_nodes = {state.expression.nodes[node_id] for node_id in node_ids}
-            self.assertEqual(router_nodes, expected_nodes)
+            start_state = State(grammar, 'function', source_id)
+            router_states = router.find_router_states(start_state)
+            result_node_ids = {state.node_id for state in router_states}
+            self.assertEqual(result_node_ids, node_ids)

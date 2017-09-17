@@ -22,38 +22,26 @@ def find_next_state(state, token):
     return next_state
 
 
-def collect_possible_next_states(state, token):
+def collect_possible_next_states(start_state, token):
     """
     Collect the possible next states from the available states.
-    :param state: the current state of the parser
+    :param start_state: the current state of the parser
     :param token: the processed token
     :return: the sets of matching and default states
     """
     # TODO: Apply the transformation node!
-    classifier = state.grammar.classifier
+    classifier = start_state.grammar.classifier
     matching_states = set()
     default_states = set()
-    available_states = collect_available_states(state)
-    router_node_types = [
-        NodeType.ROUTER,
-        NodeType.EXCEPT_ROUTER,
-        NodeType.DEFAULT_ROUTER,
-        NodeType.TOKEN,
-        NodeType.EXCEPT_TOKEN,
-        NodeType.DEFAULT_TOKEN,
-        NodeType.FINISH
-    ]
-    for available_state in available_states:
-        router_nodes = find_router_nodes(available_state)
-        for node in router_nodes:
-            assert node.type in router_node_types
-            if node.type in [NodeType.ROUTER, NodeType.TOKEN]:
-                if classifier.is_in_class(node.value, token):
+    for available_state in collect_available_states(start_state):
+        for state in find_router_states(available_state):
+            if state.node.type in [NodeType.ROUTER, NodeType.TOKEN]:
+                if classifier.is_in_class(state.node.value, token):
                     matching_states.add(available_state)
-            elif node.type in [NodeType.EXCEPT_ROUTER, NodeType.EXCEPT_TOKEN]:
-                if not classifier.is_in_class(node.value, token):
+            elif state.node.type in [NodeType.EXCEPT_ROUTER, NodeType.EXCEPT_TOKEN]:
+                if not classifier.is_in_class(state.node.value, token):
                     matching_states.add(available_state)
-            elif node.type in [NodeType.DEFAULT_ROUTER, NodeType.DEFAULT_TOKEN, NodeType.FINISH]:
+            elif state.node.type in [NodeType.DEFAULT_ROUTER, NodeType.DEFAULT_TOKEN, NodeType.FINISH]:
                 default_states.add(available_state)
     return matching_states, default_states
 
@@ -89,13 +77,13 @@ def collect_available_states(state):
     :return: the set of the available states
     """
     target_node_ids = state.expression.get_target_node_ids(state.node_id)
-    available_states = {State(state.grammar, state.expression_name, node_id) for node_id in target_node_ids}
+    available_states = {state.at_node_id(node_id) for node_id in target_node_ids}
     return available_states
 
 
-def find_router_nodes(state):
+def find_router_states(start_state):
     """
-    Find the available router node identifiers from the current node.
+    Find the available router states from the current state.
     The type of the router node can be on of the followings:
     - NodeType.ROUTER,
     - NodeType.EXCEPT_ROUTER,
@@ -105,29 +93,27 @@ def find_router_nodes(state):
     - NodeType.DEFAULT_TOKEN,
     - NodeType.FINISH.
     The router node is the current node of the state when the type matches.
-    :param state: the start state of the searching
-    :return: set of router nodes
+    :param start_state: the start state of the searching
+    :return: set of router states
     """
-    # TODO: Search nodes over expression type nodes!
-    router_nodes = set()
-    visited_node_ids = set()
-    next_node_ids = {state.node_id}
-    router_node_types = [
-        NodeType.ROUTER,
-        NodeType.EXCEPT_ROUTER,
-        NodeType.DEFAULT_ROUTER,
-        NodeType.TOKEN,
-        NodeType.EXCEPT_TOKEN,
-        NodeType.DEFAULT_TOKEN,
-        NodeType.FINISH
-    ]
-    while next_node_ids:
-        node_id = next_node_ids.pop()
-        if node_id not in visited_node_ids:
-            visited_node_ids.add(node_id)
-            node = state.expression.nodes[node_id]
-            if node.type in router_node_types:
-                router_nodes.add(node)
+    router_states = set()
+    visited_states = set()
+    next_states = {start_state}
+    while next_states:
+        state = next_states.pop()
+        if state not in visited_states:
+            visited_states.add(state)
+            if state.node.type is NodeType.EXPRESSION:
+                expression_name = state.node.value
+                node_id = state.grammar.expressions[expression_name].get_start_node_id()
+                entry_state = State(state.grammar, expression_name, node_id, state)
+                next_states.add(entry_state)
+            elif state.node.type is NodeType.FINISH:
+                router_states.add(state.return_state or state)
+            elif state.node.has_routing_information():
+                router_states.add(state)
             else:
-                next_node_ids.update(state.expression.get_target_node_ids(node_id))
-    return router_nodes
+                for node_id in state.expression.get_target_node_ids(state.node_id):
+                    next_state = state.at_node_id(node_id)
+                    next_states.add(next_state)
+    return router_states
