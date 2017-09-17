@@ -9,12 +9,8 @@ from exprail import router
 class RouterTest(unittest.TestCase):
     """Unittest for routing in the grammar"""
 
-    def setUp(self):
-        if not os.path.isdir('/tmp/exprail'):
-            raise RuntimeError('You should link the test grammar files into the /tmp directory!')
-
     def test_unique_available_state(self):
-        grammar = Grammar('/tmp/exprail/function.grammar')
+        grammar = Grammar('grammars/function.grammar')
         connections = {
             5: 2,
             6: 9,
@@ -33,14 +29,14 @@ class RouterTest(unittest.TestCase):
             self.assertEqual(states, {target})
 
     def test_recurrent_next_state(self):
-        grammar = Grammar('/tmp/exprail/function.grammar')
+        grammar = Grammar('grammars/function.grammar')
         token_state = State(grammar, 'skip', 3)
         finish_state = State(grammar, 'skip', 2)
         states = router.collect_available_states(token_state)
         self.assertEqual(states, {token_state, finish_state})
 
     def test_multiple_next_states(self):
-        grammar = Grammar('/tmp/exprail/function.grammar')
+        grammar = Grammar('grammars/function.grammar')
         connections = {
             1: [3, 11],
             3: [4, 13],
@@ -55,7 +51,7 @@ class RouterTest(unittest.TestCase):
             self.assertEqual(states, targets)
 
     def test_multiple_router_nodes(self):
-        grammar = Grammar('/tmp/exprail/function.grammar')
+        grammar = Grammar('grammars/function.grammar')
         connections = {
             1: {3, 12},
             2: {2},

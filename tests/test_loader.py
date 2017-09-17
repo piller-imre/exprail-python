@@ -8,20 +8,16 @@ from exprail.node import NodeType
 class LoaderTest(unittest.TestCase):
     """Unittest for grammar loading"""
 
-    def setUp(self):
-        if not os.path.isdir('/tmp/exprail'):
-            raise RuntimeError('You should link the test grammar files into the /tmp directory!')
-
     def test_missing_grammar_file(self):
         with self.assertRaises(ValueError):
-            _ = loader.load_expressions('/tmp/exprail/missing.grammar')
+            _ = loader.load_expressions('grammars/missing.grammar')
 
     def test_empty_grammar_file(self):
-        expressions = loader.load_expressions('/tmp/exprail/empty.grammar')
+        expressions = loader.load_expressions('grammars/empty.grammar')
         self.assertEqual(len(expressions), 0)
 
     def test_single_expression(self):
-        expressions = loader.load_expressions('/tmp/exprail/single.grammar')
+        expressions = loader.load_expressions('grammars/single.grammar')
         self.assertEqual(len(expressions), 1)
         self.assertIn('sample', expressions)
         expression = expressions['sample']
@@ -51,7 +47,7 @@ class LoaderTest(unittest.TestCase):
             self.assertEqual(target_ids, reference_ids)
 
     def test_escaped_characters(self):
-        expressions = loader.load_expressions('/tmp/exprail/escaped.grammar')
+        expressions = loader.load_expressions('grammars/escaped.grammar')
         self.assertEqual(len(expressions), 1)
         self.assertIn('escaped', expressions)
         expression = expressions['escaped']
@@ -63,7 +59,7 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(expression.nodes[6].value, 'three   two  one zero')
 
     def test_empty_expressions(self):
-        expressions = loader.load_expressions('/tmp/exprail/empties.grammar')
+        expressions = loader.load_expressions('grammars/empties.grammar')
         self.assertEqual(len(expressions), 6)
         expression_names = [
             'first',
@@ -78,7 +74,7 @@ class LoaderTest(unittest.TestCase):
             self.assertEqual(len(expression.nodes), 0)
 
     def test_multiple_expressions(self):
-        expressions = loader.load_expressions('/tmp/exprail/multiple.grammar')
+        expressions = loader.load_expressions('grammars/multiple.grammar')
         self.assertEqual(len(expressions), 2)
         self.assertIn('first', expressions)
         expression = expressions['first']
