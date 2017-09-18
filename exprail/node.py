@@ -42,21 +42,30 @@ class Node:
     def value(self):
         return self._value
 
-    def has_routing_information(self):
+    def is_matchable(self):
         """
-        Check that the node has information for routing.
-        :return: True, when the node helps routing, else False
+        Check that the node can be matched in the routing process.
+        :return: True, when the route is matchable, else False
         """
-        router_node_types = [
+        matchable_types = [
             NodeType.ROUTER,
             NodeType.EXCEPT_ROUTER,
-            NodeType.DEFAULT_ROUTER,
             NodeType.TOKEN,
-            NodeType.EXCEPT_TOKEN,
+            NodeType.EXCEPT_TOKEN
+        ]
+        return self._type in matchable_types
+
+    def is_default(self):
+        """
+        Check that the node can be used as a default route.
+        :return: True, when the node is a default route, else False
+        """
+        default_types = [
+            NodeType.DEFAULT_ROUTER,
             NodeType.DEFAULT_TOKEN,
             NodeType.FINISH
         ]
-        return self._type in router_node_types
+        return self._type in default_types
 
     def __repr__(self):
         return '<Node({}, {})>'.format(self._type, self._value)

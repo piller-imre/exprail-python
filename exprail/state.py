@@ -2,6 +2,8 @@
 State class definition
 """
 
+from exprail.node import NodeType
+
 
 class State:
     """Represents the state of the parser."""
@@ -67,3 +69,23 @@ class State:
         :return: a state object
         """
         return State(self._grammar, self._expression_name, node_id, self._return_state)
+
+    def find_successor_states(self):
+        """
+        Find the successor states of the given state.
+        :return: the set of successor states
+        """
+        if self.node.type is NodeType.EXPRESSION:
+            expression_name = self.node.value
+            node_id = self._grammar.expressions[expression_name].get_start_node_id()
+            start_state = State(self._grammar, expression_name, node_id, self)
+            return start_state.find_successor_states()
+        elif self.node.type is NodeType.FINISH:
+            if self._return_state is not None:
+                return self._return_state.find_successor_states()
+            else:
+                return set()
+        else:
+            target_node_ids = self.expression.get_target_node_ids(self.node_id)
+            successor_states = {self.at_node_id(node_id) for node_id in target_node_ids}
+            return successor_states

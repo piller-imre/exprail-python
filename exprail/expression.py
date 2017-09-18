@@ -71,3 +71,24 @@ class Expression:
         if node_id not in self._edges:
             return set()
         return self._edges[node_id]
+
+    def has_ground_node(self):
+        """
+        Check that is there a ground node in the expression.
+        :return: True, when there is a ground node in the expression, else False
+        """
+        for node in self._nodes.values():
+            if node.type is NodeType.GROUND:
+                return True
+        return False
+
+    def get_ground_node_id(self):
+        """
+        Get the identifier of the ground node.
+        :return: the ground node identifier
+        :raises RuntimeError: when the ground node does not exists
+        """
+        for node_id, node in self._nodes.items():
+            if node.type is NodeType.GROUND:
+                return node_id
+        raise RuntimeError('There is no ground node!')
