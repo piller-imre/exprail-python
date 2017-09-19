@@ -1,0 +1,29 @@
+expression "sample"
+nodes
+1 start "" 52 162
+2 info "init" 157 161
+3 token "a" 283 119
+4 token "b" 279 199
+5 default_token "" 276 279
+6 connection "" 413 168
+7 token "a" 536 116
+8 token "b" 538 212
+9 finish "" 658 162
+10 ground "" 442 316
+11 error "invalid" 545 315
+12 finish "" 653 314
+edges
+1 2
+2 3
+2 4
+2 5
+3 6
+4 6
+5 6
+6 7
+6 8
+7 9
+8 9
+10 11
+11 12
+

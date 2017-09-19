@@ -11,7 +11,8 @@ class StateTest(unittest.TestCase):
         grammar = Grammar('grammars/function.grammar')
         for node_id in [2, 12, 14, 18]:
             state = State(grammar, 'function', node_id, None)
-            self.assertEqual(state.find_successor_states(), set())
+            with self.assertRaises(RuntimeError):
+                _ = state.find_successor_states()
 
     def test_unique_successor_states(self):
         grammar = Grammar('grammars/function.grammar')

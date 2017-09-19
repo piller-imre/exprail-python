@@ -86,7 +86,7 @@ class State:
                 successor_states = {self.return_state.at_node_id(node_id) for node_id in target_node_ids}
                 return successor_states
             else:
-                return set()
+                raise RuntimeError('The top level expression finish nodes have no successors!')
         else:
             target_node_ids = self.expression.get_target_node_ids(self.node_id)
             successor_states = {self.at_node_id(node_id) for node_id in target_node_ids}

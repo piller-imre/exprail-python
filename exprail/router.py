@@ -43,10 +43,10 @@ def has_matching_successor(state, token):
     n_matching_successors = 0
     for successor in collect_matchable_successors(state):
         if successor.node.type in [NodeType.ROUTER, NodeType.TOKEN]:
-            if classifier.is_in_class(state.node.value, token):
+            if classifier.is_in_class(successor.node.value, token):
                 n_matching_successors += 1
         elif successor.node.type in [NodeType.EXCEPT_ROUTER, NodeType.EXCEPT_TOKEN]:
-            if not classifier.is_in_class(state.node.value, token):
+            if not classifier.is_in_class(successor.node.value, token):
                 n_matching_successors += 1
     if n_matching_successors == 0:
         return False
