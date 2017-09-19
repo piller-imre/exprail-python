@@ -25,7 +25,7 @@ def find_next_state(start_state, token):
     elif len(default_states) == 1:
         return default_states.pop()
     elif start_state.expression.has_ground_node():
-        node_id = start_state.get_ground_node_id()
+        node_id = start_state.expression.get_ground_node_id()
         return start_state.at_node_id(node_id)
     else:
         raise RuntimeError('There is no possible next state!')
@@ -95,3 +95,25 @@ def collect_matchable_successors(start_state):
                 processable_states.update(state.find_successor_states())
             visited_states.add(state)
     return matchable_states
+
+
+def collect_default_successors(start_state):
+    """
+    Collect the default successor states.
+    NOTE: The start state also evaluated as a successor!
+    NOTE: This function is necessary for expression validation!
+    :param start_state: the start state of the searching
+    :return: the set of default successor states
+    """
+    processable_states = {start_state}
+    default_states = set()
+    visited_states = set()
+    while processable_states:
+        state = processable_states.pop()
+        if state not in visited_states:
+            if state.node.is_default():
+                default_states.add(state)
+            elif not state.node.is_matchable():
+                processable_states.update(state.find_successor_states())
+            visited_states.add(state)
+    return default_states

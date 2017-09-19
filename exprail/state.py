@@ -82,7 +82,9 @@ class State:
             return start_state.find_successor_states()
         elif self.node.type is NodeType.FINISH:
             if self._return_state is not None:
-                return self._return_state.find_successor_states()
+                target_node_ids = self.return_state.expression.get_target_node_ids(self.return_state.node_id)
+                successor_states = {self.return_state.at_node_id(node_id) for node_id in target_node_ids}
+                return successor_states
             else:
                 return set()
         else:
