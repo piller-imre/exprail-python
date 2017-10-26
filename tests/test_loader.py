@@ -47,7 +47,7 @@ class LoaderTest(unittest.TestCase):
             self.assertEqual(target_ids, reference_ids)
 
     def test_escaped_characters(self):
-        expressions = loader.load_expressions('grammars/escaped.grammar')
+        expressions = loader.load_expressions('grammars/escaped_names.grammar')
         self.assertEqual(len(expressions), 1)
         self.assertIn('escaped', expressions)
         expression = expressions['escaped']

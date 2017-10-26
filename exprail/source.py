@@ -10,7 +10,7 @@ class Source:
 
     def __init__(self):
         """Initialize the source object."""
-        self._token = None
+        self._token = self.get_finish_token()
         self._ready = False
 
     @staticmethod
