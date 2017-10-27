@@ -38,7 +38,7 @@ class SourceString(Source):
             self._token = Token('char', self._input[self._index])
             self._index += 1
         else:
-            return Source.get_finish_token()
+            self._token = Source.get_finish_token()
 
 
 class SourceFile(Source):

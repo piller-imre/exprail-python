@@ -6,8 +6,9 @@ nodes
 4 token "ws" 350 300
 5 clean "" 200 100
 6 stack "" 300 100
-7 operation "print" 500 100
+7 operation "save" 500 100
 edges
+1 2
 1 4
 1 5
 3 6
