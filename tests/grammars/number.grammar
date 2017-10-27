@@ -1,0 +1,85 @@
+expression "number"
+nodes
+1 start "" -160 123
+2 finish "" 2383 131
+3 token "0" 433 128
+4 token "." 761 -14
+5 token "0-9" 1006 -10
+6 token "1-9" 428 55
+7 token "0-9" 631 47
+8 connection "" 200 124
+9 token "-" -19 65
+10 connection "" 726 129
+11 connection "" 1093 129
+13 token "e" 1304 66
+14 token "E" 1303 -3
+15 token "+" 1580 -89
+16 token "-" 1659 19
+17 token "0-9" 1912 71
+20 error "Unnecessary plus sign!" -31 183
+21 token "+" 79 247
+22 finish "" 186 248
+24 stack "fraction" 871 -13
+26 operation "negative" 80 66
+27 operation "non-negative" 35 124
+28 error "Digit required!" 319 191
+29 finish "" 445 192
+30 stack "integer" 315 93
+31 stack "integer" 533 13
+32 stack "exponent" 1540 20
+33 stack "exponent" 1789 68
+34 connection "" 1434 69
+35 token "empty" 2139 129
+36 connection "" 2020 128
+37 error "Invalid number format!" 2158 210
+38 operation "save" 2238 130
+39 error "Missing fraction!" 878 -116
+40 finish "" 1023 -117
+edges
+1 9
+1 20
+1 27
+3 10
+4 24
+4 39
+5 11
+5 24
+6 10
+6 31
+7 10
+7 31
+8 28
+8 30
+9 26
+10 4
+10 11
+11 13
+11 14
+11 36
+13 34
+14 34
+15 33
+16 33
+17 33
+17 36
+20 21
+21 22
+24 5
+26 8
+27 8
+28 29
+30 3
+30 6
+31 7
+32 16
+33 17
+34 15
+34 32
+34 33
+35 38
+36 35
+36 37
+37 2
+38 2
+39 40
+

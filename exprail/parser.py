@@ -101,6 +101,8 @@ class Parser:
         :param token: the current token
         :return: None
         """
+        if stack_name not in self._stacks:
+            self._stacks[stack_name] = []
         self._stacks[stack_name].append(token.value)
 
     def clean_stack(self, stack_name, token):
