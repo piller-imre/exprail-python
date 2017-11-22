@@ -1,0 +1,40 @@
+expression "element"
+nodes
+1 start "" -47 148
+2 finish "" 742 147
+3 token "name" 176 146
+4 expression "element" 357 103
+5 token "text" 397 188
+6 error "Missing element name!" 202 344
+7 token ";" 644 146
+8 error "Element, text or semicolon expected!" 289 280
+9 finish "" 401 281
+10 finish "" 310 343
+11 error "Missing semicolon after text value!" 524 222
+12 finish "" 632 221
+13 error "Element or semicolon expected!" 535 62
+14 finish "" 656 61
+15 operation "create" 74 147
+16 operation "set_text" 296 187
+17 operation "up" 535 145
+edges
+1 6
+1 15
+3 4
+3 8
+3 16
+3 17
+4 4
+4 13
+4 17
+5 11
+5 17
+6 10
+7 2
+8 9
+11 12
+13 14
+15 3
+16 5
+17 7
+
