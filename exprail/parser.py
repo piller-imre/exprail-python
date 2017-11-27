@@ -128,6 +128,7 @@ class Parser:
             self._state = State(self._state.grammar, expression_name, node_id, self._state)
         elif node_type is NodeType.FINISH:
             if self._state.return_state is None:
+                self._token = self.get_finish_token()
                 self._ready = True
         elif node_type is NodeType.INFO:
             self.show_info(node_value, token)
