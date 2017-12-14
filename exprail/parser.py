@@ -7,7 +7,7 @@ from exprail import router
 from exprail.state import State
 
 
-class Parser:
+class Parser(object):
     """The base class for other parsers"""
 
     def __init__(self, grammar, source):

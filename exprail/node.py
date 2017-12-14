@@ -27,7 +27,7 @@ class NodeType(Enum):
     CLEAN = 'clean'
 
 
-class Node:
+class Node(object):
     """Represents a node of the syntax graph"""
 
     def __init__(self, type, value=''):

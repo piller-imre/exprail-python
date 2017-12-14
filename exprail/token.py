@@ -3,7 +3,7 @@ Token class definition
 """
 
 
-class Token:
+class Token(object):
     """Represents a token with type and value"""
 
     def __init__(self, type, value):

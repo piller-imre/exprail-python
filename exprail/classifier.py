@@ -3,7 +3,7 @@ Classifier class definition
 """
 
 
-class Classifier:
+class Classifier(object):
     """Represents the base class of the token classifiers."""
 
     @staticmethod

@@ -7,7 +7,7 @@ from exprail import validator
 from exprail.state import State
 
 
-class Grammar:
+class Grammar(object):
     """Represents a grammar"""
 
     def __init__(self, filename=None, classifier=None):

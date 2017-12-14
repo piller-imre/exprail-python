@@ -5,7 +5,7 @@ Source class definition
 from exprail.token import Token
 
 
-class Source:
+class Source(object):
     """The base class for input streams"""
 
     def __init__(self):

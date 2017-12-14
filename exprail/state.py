@@ -5,7 +5,7 @@ State class definition
 from exprail.node import NodeType
 
 
-class State:
+class State(object):
     """Represents the state of the parser."""
 
     def __init__(self, grammar, expression_name, node_id, return_state=None):

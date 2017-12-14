@@ -5,7 +5,7 @@ Expression class definition
 from exprail.node import NodeType
 
 
-class Expression:
+class Expression(object):
     """Represents an expression as a syntax graph"""
 
     def __init__(self, index=None):
